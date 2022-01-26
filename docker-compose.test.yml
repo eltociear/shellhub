@@ -9,7 +9,7 @@ services:
       target: development
       network: host
       args:
-        - GOPROXY=${SHELLHUB_GOPROXY}
+        - GOPROXY
     volumes:
       - ./ssh:/go/src/github.com/shellhub-io/shellhub/ssh
       - ./pkg:/go/src/github.com/shellhub-io/shellhub/pkg
@@ -27,16 +27,15 @@ services:
       network: host
       args:
         - GOPROXY=${SHELLHUB_GOPROXY}
-        - DB_NAME=${MONGO_DB_NAME}
+        - CACHE=${SHELLHUB_STORE_CACHE}
+        - BILLING=${SHELLHUB_BILLING}
+        - CLOUD=${SHELLHUB_CLOUD}
+        - ENTERPRISE=${SHELLHUB_ENTERPRISE}
     volumes:
       - ./api:/go/src/github.com/shellhub-io/shellhub/api
       - ./pkg:/go/src/github.com/shellhub-io/shellhub/pkg
       - /var/run/docker.sock:/var/run/docker.sock
       - ./.golangci.yaml:/.golangci.yaml
-    environment:
-      - SHELLHUB_ENTERPRISE=${SHELLHUB_ENTERPRISE}
-      - SHELLHUB_CLOUD=${SHELLHUB_CLOUD}
-      - SHELLHUB_BILLING=${SHELLHUB_BILLING}
   ui:
     image: ui
     build:
@@ -45,7 +44,7 @@ services:
       target: development
       network: host
       args:
-        - NPM_CONFIG_REGISTRY=${SHELLHUB_NPM_REGISTRY}
+        - NPM_CONFIG_REGISTRY
     volumes:
       - ./ui:/src
     environment:
@@ -57,7 +56,7 @@ services:
       dockerfile: gateway/Dockerfile
     environment:
       - SHELLHUB_VERSION=latest
-      - SHELLHUB_ENV=${SHELLHUB_ENV}
+      - SHELLHUB_ENV=development
   agent:
     image: agent
     restart: unless-stopped
@@ -68,7 +67,7 @@ services:
       network: host
       args:
         - SHELLHUB_VERSION=latest
-        - GOPROXY=${SHELLHUB_GOPROXY}
+        - GOPROXY
 
     privileged: true
     network_mode: host
