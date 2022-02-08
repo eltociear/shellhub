@@ -1,0 +1,44 @@
+[
+  {
+    "name": "jucaspace",
+    "owner": "1",
+    "tenant_id": "jucatenant",
+    "members": [
+      {
+        "id": "1",
+        "username": "juca",
+        "role": "owner"
+      }
+    ],
+    "max_devices": 3,
+    "device_count": 2
+  },
+  {
+    "name": "batataspace",
+    "owner": "1",
+    "tenant_id": "batatatenant",
+    "members": [
+      {
+        "id": "2",
+        "username": "batata",
+        "role": "owner"
+      }
+    ],
+    "max_devices": 3,
+    "device_count": 2
+  },
+  {
+    "name": "marmotaspace",
+    "owner": "1",
+    "tenant_id": "marmotatenant",
+    "members": [
+      {
+        "id": "3",
+        "username": "marmota",
+        "role": "owner"
+      }
+    ],
+    "max_devices": 3,
+    "device_count": 2
+  }
+]

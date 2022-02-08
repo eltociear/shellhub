@@ -1,0 +1,28 @@
+[{
+      "id": "1",
+      "namespaces": 1,
+      "confirmed": true,
+      "name": "juca",
+      "email": "test@juca.com",
+      "username": "juca",
+      "password": "123"
+    },
+    {
+      "id": "2",
+      "namespaces": 2,
+      "confirmed": true,
+      "name": "batata",
+      "email": "test@batata.com",
+      "username": "batata",
+      "password": "123"
+    },
+    {
+      "id": "3",
+      "namespaces": 3,
+      "confirmed": true,
+      "name": "marmota",
+      "email": "test@marmota.com",
+      "username": "marmota",
+      "password": "123"
+    }
+]
