@@ -65,14 +65,14 @@ func (h *Handler) CreatePublicKey(c gateway.Context) error {
 		return err
 	}
 
-	tenantID := ""
+	tenant := ""
 	if c.Tenant() != nil {
-		tenantID = c.Tenant().ID
-		key.TenantID = tenantID
+		tenant = c.Tenant().ID
+		key.TenantID = tenant
 	}
 
 	err := guard.EvaluatePermission(c.Role(), authorizer.Actions.PublicKey.Create, func() error {
-		err := h.service.CreatePublicKey(c.Ctx(), &key, tenantID)
+		err := h.service.CreatePublicKey(c.Ctx(), &key, tenant)
 
 		return err
 	})
@@ -155,25 +155,20 @@ func (h *Handler) CreatePrivateKey(c gateway.Context) error {
 }
 
 func (h *Handler) EvaluateKey(c gateway.Context) error {
-	pubKey, err := h.service.GetPublicKey(c.Ctx(), c.Param(ParamPublicKeyFingerprint), c.Param(ParamNamespaceTenant))
+	key, err := h.service.GetPublicKey(c.Ctx(), c.Param(ParamPublicKeyFingerprint), c.Param(ParamNamespaceTenant))
 	if err != nil {
 		return c.JSON(http.StatusForbidden, err)
 	}
 
-	var device models.Device
-	if err := c.Bind(&device); err != nil {
+	device := new(models.Device)
+	if err := c.Bind(device); err != nil {
 		return c.JSON(http.StatusForbidden, err)
 	}
 
-	usernameOk, err := h.service.EvaluateKeyUsername(c.Ctx(), pubKey, c.Param(ParamUserName))
+	ok, err := h.service.EvaluateKey(c.Ctx(), key, device, c.Param(ParamUserName))
 	if err != nil {
-		return err
+		return c.JSON(http.StatusForbidden, err)
 	}
 
-	hostnameOk, err := h.service.EvaluateKeyHostname(c.Ctx(), pubKey, device)
-	if err != nil {
-		return err
-	}
-
-	return c.JSON(http.StatusOK, usernameOk && hostnameOk)
+	return c.JSON(http.StatusOK, ok)
 }
